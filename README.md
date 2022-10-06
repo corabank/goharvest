@@ -1,12 +1,9 @@
 <img src="https://raw.githubusercontent.com/wiki/obsidiandynamics/goharvest/images/goharvest-logo-wide.png" width="400px" alt="logo"/>&nbsp;
 ===
 ![Go version](https://img.shields.io/github/go-mod/go-version/corabank/goharvest)
-[![Build](https://travis-ci.org/obsidiandynamics/goharvest.svg?branch=master) ](https://travis-ci.org/obsidiandynamics/goharvest#)
-![Release](https://img.shields.io/github/v/release/obsidiandynamics/goharvest?color=ff69b4)
-[![Codecov](https://codecov.io/gh/obsidiandynamics/goharvest/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/goharvest)
-[![Go Report Card](https://goreportcard.com/badge/github.com/obsidiandynamics/goharvest)](https://goreportcard.com/report/github.com/obsidiandynamics/goharvest)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/obsidiandynamics/goharvest.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/obsidiandynamics/goharvest/alerts/)
-[![GoDoc Reference](https://img.shields.io/badge/docs-GoDoc-blue.svg)](https://pkg.go.dev/github.com/obsidiandynamics/goharvest?tab=doc)
+[![Build](https://github.com/corabank/goharvest/actions/workflows/go.yml/badge.svg?branch=master)](https://github.com/corabank/goharvest/actions/workflows/go.yml)
+![Release](https://img.shields.io/github/v/release/corabank/goharvest?color=ff69b4)
+[![Go Report Card](https://goreportcard.com/badge/github.com/corabank/goharvest)](https://goreportcard.com/report/github.com/corabank/goharvest)
 
 `goharvest` is a Go implementation of the [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern for Postgres and Kafka.
 
@@ -35,7 +32,7 @@ This runs `goharvest` within a separate process called `reaper`, which will work
 
 #### Install `reaper`
 ```sh
-go get -u github.com/obsidiandynamics/goharvest/cmd/reaper
+go get -u github.com/corabank/goharvest/cmd/reaper
 ```
 
 #### Create `reaper.yaml` configuration
@@ -47,7 +44,7 @@ harvest:
     compression.type: lz4
     delivery.timeout.ms: 10000
   schemaSerializerConfig:
-    schemaRegistryURL: http://localhost:9092
+    schemaRegistryURL: mock://test
   leaderTopic: my-app-name
   leaderGroupID: my-app-name
   dataSource: host=localhost port=5432 user=postgres password= dbname=postgres sslmode=disable
@@ -73,12 +70,12 @@ reaper -f reaper.yaml
 
 #### Add the dependency
 ```sh
-go get -u github.com/obsidiandynamics/goharvest
+go get -u github.com/corabank/goharvest
 ```
 
 #### Create and start a `Harvest` instance
 ```go
-import "github.com/obsidiandynamics/goharvest"
+import "github.com/corabank/goharvest"
 ```
 
 ```go
@@ -86,6 +83,9 @@ import "github.com/obsidiandynamics/goharvest"
 config := Config{
   BaseKafkaConfig: KafkaConfigMap{
     "bootstrap.servers": "localhost:9092",
+  },
+  SchemaSerializerConfig: SchemaSerializerConfig{
+    SchemaRegistryURL: "mock://test"
   },
   DataSource: "host=localhost port=5432 user=postgres password= dbname=postgres sslmode=disable",
 }
@@ -219,7 +219,7 @@ The `goharvest` library comes with a `stasher` helper package for writing record
 When one database update corresponds to one message, the easiest approach is to call `Stasher.Stash()`:
 
 ```go
-import "github.com/obsidiandynamics/goharvest"
+import "github.com/corabank/goharvest"
 ```
 
 ```go
