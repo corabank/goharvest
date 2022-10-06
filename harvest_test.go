@@ -40,16 +40,23 @@ func testLimits() Limits {
 }
 
 type fixtures struct {
-	producerMockSetup producerMockSetup
+	producerMockSetup   producerMockSetup
+	serializerMockSetup serializerMockSetup
 }
 
 func (f *fixtures) setDefaults() {
 	if f.producerMockSetup == nil {
 		f.producerMockSetup = func(prodMock *prodMock) {}
 	}
+
+	if f.serializerMockSetup == nil {
+		f.serializerMockSetup = func(serMock *serMock) {}
+	}
 }
 
 type producerMockSetup func(prodMock *prodMock)
+
+type serializerMockSetup func(serMock *serMock)
 
 func (f fixtures) create() (scribe.MockScribe, *dbMock, *goneli.MockNeli, Config) {
 	f.setDefaults()
@@ -79,6 +86,12 @@ func (f fixtures) create() (scribe.MockScribe, *dbMock, *goneli.MockNeli, Config
 			prod.fillDefaults()
 			f.producerMockSetup(prod)
 			return prod, nil
+		},
+		SchemaSerializerProvider: func(conf *SchemaSerializerConfig) (SchemaSerializer, error) {
+			ser := &serMock{}
+			ser.fillDefaults()
+			f.serializerMockSetup(ser)
+			return ser, nil
 		},
 	}
 	config.Scribe.SetEnabled(scribe.All)

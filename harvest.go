@@ -291,6 +291,12 @@ func (h *harvest) spawnSendBattery() {
 			panic(err)
 		}
 
+		h.logger().T()("Creating schema serializer with config %v", h.config.SchemaSerializerConfig)
+		serializer, err := h.config.SchemaSerializerProvider(&h.config.SchemaSerializerConfig)
+		if err != nil {
+			panic(err)
+		}
+
 		deliveryHandlerDone := make(chan int)
 		go backgroundDeliveryHandler(h, prod, deliveryHandlerDone)
 
@@ -313,10 +319,18 @@ func (h *harvest) spawnSendBattery() {
 			ensureState(lastID == nil || rec.ID >= *lastID, "discontinuity for key %s: ID %s, lastID: %v", rec.KafkaKey, rec.ID, lastID)
 			lastID = &rec.ID
 
+			value, err := serializer.Serialize(rec.KafkaTopic, stringPointerToByteArray(rec.KafkaValue))
+			if err != nil {
+				h.logger().W()("Error serializing record %v: %v", rec, err)
+				h.inFlightKeys.Dec(rec.KafkaKey)
+				h.inFlightRecords.Dec()
+				h.forceRemarkFlag.Set(1)
+			}
+
 			m := &kafka.Message{
 				TopicPartition: kafka.TopicPartition{Topic: &rec.KafkaTopic, Partition: kafka.PartitionAny},
 				Key:            []byte(rec.KafkaKey),
-				Value:          stringPointerToByteArray(rec.KafkaValue),
+				Value:          value,
 				Opaque:         rec,
 				Headers:        toNativeKafkaHeaders(rec.KafkaHeaders),
 			}
@@ -328,7 +342,7 @@ func (h *harvest) spawnSendBattery() {
 				if h.deadlineExceeded("poll", h.neli.Deadline().Elapsed(), *h.config.Limits.MaxPollInterval) {
 					break
 				}
-				if h.deadlineExceeded("message queueing", time.Now().Sub(startTime), *h.config.Limits.QueueTimeout) {
+				if h.deadlineExceeded("message queueing", time.Since(startTime), *h.config.Limits.QueueTimeout) {
 					break
 				}
 				if remaining := h.inFlightKeys.Drain(rec.KafkaKey, 0, *h.config.Limits.DrainInterval); remaining <= 0 {
@@ -347,7 +361,7 @@ func (h *harvest) spawnSendBattery() {
 			h.queuedRecords.Dec()
 			h.inFlightKeys.Inc(rec.KafkaKey)
 
-			err := prod.Produce(m, nil)
+			err = prod.Produce(m, nil)
 			if err != nil {
 				h.logger().W()("Error publishing record %v: %v", rec, err)
 				h.inFlightKeys.Dec(rec.KafkaKey)

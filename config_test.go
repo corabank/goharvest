@@ -194,6 +194,8 @@ baseKafkaConfig:
   bootstrap.servers: localhost:9093
 producerKafkaConfig:
   compression.type: lz4
+schemaSerializerConfig:
+  schemaRegistryURL: mock://test.com
 leaderTopic: leader-topic
 leaderGroupID: leader-group-id
 dataSource: data-source
@@ -225,6 +227,9 @@ name: test-name
 		ProducerKafkaConfig: KafkaConfigMap{
 			"compression.type": "lz4",
 		},
+		SchemaSerializerConfig: SchemaSerializerConfig{
+			SchemaRegistryURL: "mock://test.com",
+		},
 		LeaderTopic:   "leader-topic",
 		LeaderGroupID: "leader-group-id",
 		DataSource:    "data-source",
@@ -248,7 +253,7 @@ name: test-name
 	exp.SetDefaults()
 	ignoreFields := cmpopts.IgnoreFields(
 		Config{},
-		"KafkaConsumerProvider", "KafkaProducerProvider", "DatabaseBindingProvider", "NeliProvider", "Scribe",
+		"KafkaConsumerProvider", "KafkaProducerProvider", "SchemaSerializerProvider", "DatabaseBindingProvider", "NeliProvider", "Scribe",
 	)
 	assert.True(t, cmp.Equal(exp, cfg, ignoreFields), "Diff: %v", cmp.Diff(exp, cfg, ignoreFields))
 }
@@ -264,7 +269,7 @@ func TestUnmarshal_empty(t *testing.T) {
 	exp.SetDefaults()
 	ignoreFields := cmpopts.IgnoreFields(
 		Config{},
-		"KafkaConsumerProvider", "KafkaProducerProvider", "DatabaseBindingProvider", "NeliProvider", "Scribe", "Name",
+		"KafkaConsumerProvider", "KafkaProducerProvider", "SchemaSerializerProvider", "DatabaseBindingProvider", "NeliProvider", "Scribe", "Name",
 	)
 	assert.True(t, cmp.Equal(exp, cfg, ignoreFields), "Diff: %v", cmp.Diff(exp, cfg, ignoreFields))
 }

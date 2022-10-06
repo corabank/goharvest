@@ -111,24 +111,64 @@ func (l Limits) String() string {
 	)
 }
 
+// SchemaSerializerConfig represents the configuration for the Schema Registry.
+type SchemaSerializerConfig struct {
+	SchemaRegistryURL              string `yaml:"schemaRegistryURL"`
+	BasicAuthUserInfo              string `yaml:"basicAuthUserInfo"`
+	BasicAuthCredentialsSource     string `yaml:"basicAuthCredentialsSource"`
+	SaslMechanism                  string `yaml:"saslMechanism"`
+	SaslUsername                   string `yaml:"saslUsername"`
+	SaslPassword                   string `yaml:"saslPassword"`
+	SslCertificateLocation         string `yaml:"sslCertificateLocation"`
+	SslKeyLocation                 string `yaml:"sslKeyLocation"`
+	SslCaLocation                  string `yaml:"sslCaLocation"`
+	SslDisableEndpointVerification bool   `yaml:"sslDisableEndpointVerification"`
+	ConnectionTimeoutMs            int    `yaml:"connectionTimeoutMs"`
+	RequestTimeoutMs               int    `yaml:"requestTimeoutMs"`
+	CacheCapacity                  int    `yaml:"cacheCapacity"`
+	UseLatestVersion               bool   `yaml:"useLatestVersion"`
+}
+
+// String obtains a textural representation of SchemaRegistryConfig.
+func (src SchemaSerializerConfig) String() string {
+	return fmt.Sprint(
+		"SchemaRegistryConfig[URL=", src.SchemaRegistryURL,
+		", BasicAuthUserInfo=", src.BasicAuthUserInfo,
+		", BasicAuthCredentialsSource=", src.BasicAuthCredentialsSource,
+		", SaslMechanism=", src.SaslMechanism,
+		", SaslUsername=", src.SaslUsername,
+		", SaslPassword=", src.SaslPassword,
+		", SslCertificateLocation=", src.SslCertificateLocation,
+		", SslKeyLocation=", src.SslKeyLocation,
+		", SslCaLocation=", src.SslCaLocation,
+		", SslDisableEndpointVerification=", src.SslDisableEndpointVerification,
+		", ConnectionTimeoutMs=", src.ConnectionTimeoutMs,
+		", RequestTimeoutMs=", src.RequestTimeoutMs,
+		", CacheCapacity=", src.CacheCapacity,
+		", UseLatestVersion=", src.UseLatestVersion, "]",
+	)
+}
+
 // KafkaConfigMap represents the Kafka key-value configuration.
 type KafkaConfigMap map[string]interface{}
 
 // Config encapsulates configuration for Harvest.
 type Config struct {
-	BaseKafkaConfig         KafkaConfigMap `yaml:"baseKafkaConfig"`
-	ProducerKafkaConfig     KafkaConfigMap `yaml:"producerKafkaConfig"`
-	LeaderTopic             string         `yaml:"leaderTopic"`
-	LeaderGroupID           string         `yaml:"leaderGroupID"`
-	DataSource              string         `yaml:"dataSource"`
-	OutboxTable             string         `yaml:"outboxTable"`
-	Limits                  Limits         `yaml:"limits"`
-	KafkaConsumerProvider   KafkaConsumerProvider
-	KafkaProducerProvider   KafkaProducerProvider
-	DatabaseBindingProvider DatabaseBindingProvider
-	NeliProvider            NeliProvider
-	Scribe                  scribe.Scribe
-	Name                    string `yaml:"name"`
+	BaseKafkaConfig          KafkaConfigMap         `yaml:"baseKafkaConfig"`
+	ProducerKafkaConfig      KafkaConfigMap         `yaml:"producerKafkaConfig"`
+	SchemaSerializerConfig   SchemaSerializerConfig `yaml:"schemaSerializerConfig"`
+	LeaderTopic              string                 `yaml:"leaderTopic"`
+	LeaderGroupID            string                 `yaml:"leaderGroupID"`
+	DataSource               string                 `yaml:"dataSource"`
+	OutboxTable              string                 `yaml:"outboxTable"`
+	Limits                   Limits                 `yaml:"limits"`
+	KafkaConsumerProvider    KafkaConsumerProvider
+	KafkaProducerProvider    KafkaProducerProvider
+	SchemaSerializerProvider SchemaSerializerProvider
+	DatabaseBindingProvider  DatabaseBindingProvider
+	NeliProvider             NeliProvider
+	Scribe                   scribe.Scribe
+	Name                     string `yaml:"name"`
 }
 
 // Validate the Config, returning an error if invalid.
@@ -153,6 +193,7 @@ func (c Config) String() string {
 	return fmt.Sprint(
 		"Config[BaseKafkaConfig=", c.BaseKafkaConfig,
 		", ProducerKafkaConfig=", c.ProducerKafkaConfig,
+		", SchemaRegistryConfig=", c.SchemaSerializerConfig,
 		", LeaderTopic=", c.LeaderTopic,
 		", LeaderGroupID=", c.LeaderGroupID,
 		", DataSource=", c.DataSource,
@@ -160,6 +201,7 @@ func (c Config) String() string {
 		", Limits=", c.Limits,
 		", KafkaConsumerProvider=", c.KafkaConsumerProvider,
 		", KafkaProducerProvider=", c.KafkaProducerProvider,
+		", SchemaSerializerProvider=", c.SchemaSerializerProvider,
 		", DatabaseBindingProvider=", c.DatabaseBindingProvider,
 		", NeliProvider=", c.NeliProvider,
 		", Scribe=", c.Scribe,
@@ -189,6 +231,9 @@ func (c *Config) SetDefaults() {
 	}
 	if c.KafkaProducerProvider == nil {
 		c.KafkaProducerProvider = StandardKafkaProducerProvider()
+	}
+	if c.SchemaSerializerProvider == nil {
+		c.SchemaSerializerProvider = StandardSchemaSerializerProvider()
 	}
 	if c.DatabaseBindingProvider == nil {
 		c.DatabaseBindingProvider = StandardPostgresBindingProvider()
