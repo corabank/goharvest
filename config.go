@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/corabank/goneli"
 	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/obsidiandynamics/goneli"
 	"github.com/obsidiandynamics/libstdgo/scribe"
 	"gopkg.in/yaml.v2"
 )

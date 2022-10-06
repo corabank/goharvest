@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/corabank/goneli"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/obsidiandynamics/goneli"
 	"github.com/obsidiandynamics/libstdgo/check"
 	"github.com/obsidiandynamics/libstdgo/scribe"
 	"github.com/stretchr/testify/assert"

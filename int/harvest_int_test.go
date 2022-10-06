@@ -12,9 +12,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/confluentinc/confluent-kafka-go/kafka"
+	. "github.com/corabank/goharvest"
+	"github.com/corabank/goharvest/stasher"
 	"github.com/google/uuid"
-	. "github.com/obsidiandynamics/goharvest"
-	"github.com/obsidiandynamics/goharvest/stasher"
 	"github.com/obsidiandynamics/libstdgo/check"
 	"github.com/obsidiandynamics/libstdgo/concurrent"
 	"github.com/obsidiandynamics/libstdgo/diags"
@@ -23,7 +24,6 @@ import (
 	"github.com/obsidiandynamics/libstdgo/scribe/overlog"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 type externals struct {

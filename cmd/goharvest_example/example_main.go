@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 
-	"github.com/obsidiandynamics/goharvest"
+	"github.com/corabank/goharvest"
 	"github.com/obsidiandynamics/libstdgo/scribe"
 	scribelogrus "github.com/obsidiandynamics/libstdgo/scribe/logrus"
 	"github.com/sirupsen/logrus"

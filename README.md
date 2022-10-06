@@ -130,7 +130,7 @@ config := Config{
 ```
 
 ### Listening for leader status updates
-Just like `goharvest` uses [NELI](https://github.com/obsidiandynamics/goneli) to piggy-back on Kafka's leader election, you can piggy-back on `goharvest` to get leader status updates:
+Just like `goharvest` uses [NELI](https://github.com/corabank/goneli) to piggy-back on Kafka's leader election, you can piggy-back on `goharvest` to get leader status updates:
 
 ```go
 log := logrus.StandardLogger()

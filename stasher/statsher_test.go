@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/corabank/goharvest"
 	"github.com/lib/pq"
-	"github.com/obsidiandynamics/goharvest"
 	"github.com/stretchr/testify/require"
 )
 

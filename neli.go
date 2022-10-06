@@ -1,6 +1,6 @@
 package goharvest
 
-import "github.com/obsidiandynamics/goneli"
+import "github.com/corabank/goneli"
 
 // NeliProvider is a factory for creating Neli instances.
 type NeliProvider func(config goneli.Config, barrier goneli.Barrier) (goneli.Neli, error)

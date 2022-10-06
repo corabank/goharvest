@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/obsidiandynamics/goharvest"
+	"github.com/corabank/goharvest"
 	"github.com/obsidiandynamics/libstdgo/check"
 )
 
