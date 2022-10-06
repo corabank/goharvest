@@ -1,3 +1,4 @@
+// Package goharvest provides an implementation of transactional outbox pattern
 package goharvest
 
 import (
@@ -424,7 +425,7 @@ func onLeaderPoll(h *harvest) {
 			h.sendBattery.enqueue(rec)
 		}
 		enqueueWatcher.End()
-		h.logger().T()("Send took %v", time.Now().Sub(sendBegin))
+		h.logger().T()("Send took %v", time.Since(sendBegin))
 	} else {
 		time.Sleep(*h.config.Limits.MarkBackoff)
 	}

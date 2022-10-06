@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/wiki/obsidiandynamics/goharvest/images/goharvest-logo-wide.png" width="400px" alt="logo"/>&nbsp;
 ===
-![Go version](https://img.shields.io/github/go-mod/go-version/obsidiandynamics/goharvest)
+![Go version](https://img.shields.io/github/go-mod/go-version/corabank/goharvest)
 [![Build](https://travis-ci.org/obsidiandynamics/goharvest.svg?branch=master) ](https://travis-ci.org/obsidiandynamics/goharvest#)
 ![Release](https://img.shields.io/github/v/release/obsidiandynamics/goharvest?color=ff69b4)
 [![Codecov](https://codecov.io/gh/obsidiandynamics/goharvest/branch/master/graph/badge.svg)](https://codecov.io/gh/obsidiandynamics/goharvest)

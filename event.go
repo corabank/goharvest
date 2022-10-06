@@ -50,7 +50,7 @@ type LeaderRevoked struct{}
 
 // String obtains a textual representation of the LeaderRevoked event.
 func (e LeaderRevoked) String() string {
-	return fmt.Sprint("LeaderRevoked[]")
+	return "LeaderRevoked[]"
 }
 
 // LeaderFenced is emitted when the leader status has been revoked.
@@ -58,7 +58,7 @@ type LeaderFenced struct{}
 
 // String obtains a textual representation of the LeaderFenced event.
 func (e LeaderFenced) String() string {
-	return fmt.Sprint("LeaderFenced[]")
+	return "LeaderFenced[]"
 }
 
 // MeterRead is emitted when the internal throughput Meter has been read.

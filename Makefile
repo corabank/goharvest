@@ -21,7 +21,10 @@ dirs:
 	mkdir -p bin
 
 lint:
-	golint ./...
+	staticcheck -checks=all ./...
+
+vulncheck:
+	govulncheck ./...
 
 clean:
 	rm -rf bin

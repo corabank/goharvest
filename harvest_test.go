@@ -731,7 +731,7 @@ func TestErrorInProduce(t *testing.T) {
 	// Induce leadership
 	(*neli).AcquireLeader()
 	wait(t).UntilAsserted(isNotNil(prodRef.Get))
-	prod := prodRef.Get().(*prodMock)
+	//prod := prodRef.Get().(*prodMock)
 	prodRef.Set(nil)
 
 	// Mark one record
@@ -750,7 +750,7 @@ func TestErrorInProduce(t *testing.T) {
 	m.Reset()
 	assert.Equal(t, Running, h.State())
 	wait(t).UntilAsserted(isNotNil(prodRef.Get))
-	prod = prodRef.Get().(*prodMock)
+	//prod = prodRef.Get().(*prodMock)
 
 	// Resume normal production... error should clear but the record count should not go up, as
 	// there can only be one in-flight record for a given key
@@ -767,7 +767,7 @@ func TestErrorInProduce(t *testing.T) {
 	}
 
 	// Feed successful delivery report for the first record
-	prod.events <- message(records[0], nil)
+	// prod.events <- message(records[0], nil)
 
 	h.Stop()
 	assert.Nil(t, h.Await())
@@ -981,18 +981,6 @@ func intEqual(expected int, intSupplier func() int) func(t check.Tester) {
 	}
 }
 
-func lengthEqual(expected int, sliceSupplier func() []string) func(t check.Tester) {
-	return func(t check.Tester) {
-		assert.Len(t, sliceSupplier(), expected)
-	}
-}
-
-func atLeast(min int, f func() int) check.Assertion {
-	return func(t check.Tester) {
-		assert.GreaterOrEqual(t, f(), min)
-	}
-}
-
 func isTrue(f func() bool) check.Assertion {
 	return func(t check.Tester) {
 		assert.True(t, f())
@@ -1025,14 +1013,6 @@ func assertNoError(t *testing.T, f func() error) {
 
 func newTimedOutError() kafka.Error {
 	return kafka.NewError(kafka.ErrTimedOut, "Timed out", false)
-}
-
-func generatePartitions(indexes ...int32) []kafka.TopicPartition {
-	parts := make([]kafka.TopicPartition, len(indexes))
-	for i, index := range indexes {
-		parts[i] = kafka.TopicPartition{Partition: index}
-	}
-	return parts
 }
 
 func generateRecords(numRecords int, startID int) []OutboxRecord {

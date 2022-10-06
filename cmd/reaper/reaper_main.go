@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/corabank/goharvest"
@@ -46,7 +45,8 @@ func main() {
 	panicOnError(scr, err)
 	scr.I()("Executable: %s; working directory: %s", executable, workDir)
 
-	cfgData, err := ioutil.ReadFile(configFile)
+	// Read file
+	cfgData, err := os.ReadFile(configFile)
 	panicOnError(scr, err)
 	cfg, err := unmarshal(cfgData)
 	panicOnError(scr, err)

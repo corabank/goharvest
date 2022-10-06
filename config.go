@@ -188,7 +188,7 @@ func (c Config) Validate() error {
 	)
 }
 
-// Obtains a textual representation of the configuration.
+// String obtains a textual representation of the configuration.
 func (c Config) String() string {
 	return fmt.Sprint(
 		"Config[BaseKafkaConfig=", c.BaseKafkaConfig,

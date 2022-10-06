@@ -265,7 +265,7 @@ func test(t *testing.T, numHarvests int, spawnInterval time.Duration, producerFa
 func sleepWithDeadline(duration time.Duration) {
 	beforeSleep := time.Now()
 	time.Sleep(duration)
-	if elapsed := time.Now().Sub(beforeSleep); elapsed > 2*duration {
+	if elapsed := time.Since(beforeSleep); elapsed > 2*duration {
 		scr.W()("Sleep deadline exceeded; expected %v but slept for %v", duration, elapsed)
 	}
 }
@@ -493,7 +493,7 @@ func startReceiver(t *testing.T, testID uuid.UUID, cons *kafka.Consumer) receive
 					}
 				}
 			} else {
-				elapsed := time.Now().Sub(lastMessageReceivedTime)
+				elapsed := time.Since(lastMessageReceivedTime)
 				if elapsed > receiverNoMessagesWarningTime && !messageAbsencePrinted {
 					scr.W()("No messages received since %v", lastMessageReceivedTime)
 					messageAbsencePrinted = true
@@ -528,10 +528,8 @@ func installSigQuitHandler() {
 		sig := make(chan os.Signal, 1)
 		go func() {
 			signal.Notify(sig, syscall.SIGQUIT)
-			select {
-			case <-sig:
-				scr.I()("Stack\n%s", diags.DumpAllStacks())
-			}
+			<-sig
+			scr.I()("Stack\n%s", diags.DumpAllStacks())
 		}()
 	}
 }
