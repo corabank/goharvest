@@ -3,7 +3,6 @@
 ![Go version](https://img.shields.io/github/go-mod/go-version/corabank/goharvest)
 [![Build](https://github.com/corabank/goharvest/actions/workflows/go.yml/badge.svg?branch=master)](https://github.com/corabank/goharvest/actions/workflows/go.yml)
 ![Release](https://img.shields.io/github/v/release/corabank/goharvest?color=ff69b4)
-[![Go Report Card](https://goreportcard.com/badge/github.com/corabank/goharvest)](https://goreportcard.com/report/github.com/corabank/goharvest)
 
 `goharvest` is a Go implementation of the [Transactional Outbox](https://microservices.io/patterns/data/transactional-outbox.html) pattern for Postgres and Kafka.
 
