@@ -6,6 +6,8 @@ harvest:
     sasl.mechanism: SCRAM-SHA-512
     sasl.username: alice
     sasl.password: alice-secret
+  schemaSerializerConfig:
+    schemaRegistryURL: mock://test.com
   leaderTopic: __consumer_offsets
   leaderGroupID: my-app-name
   dataSource: host=localhost port=5432 user=postgres password= dbname=postgres sslmode=disable

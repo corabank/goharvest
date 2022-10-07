@@ -4,6 +4,8 @@ harvest:
   producerKafkaConfig:
     compression.type: lz4
     delivery.timeout.ms: 10000
+  schemaSerializerConfig:
+    schemaRegistryURL: mock://test.com
   leaderTopic: my-app-name
   leaderGroupID: my-app-name
   dataSource: host=localhost port=5432 user=postgres password= dbname=postgres sslmode=disable

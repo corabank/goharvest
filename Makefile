@@ -1,6 +1,6 @@
 default: build test
 
-all: test lint
+all: test lint vulncheck
 
 build: dirs
 	go build -race -o bin ./...

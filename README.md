@@ -84,7 +84,7 @@ config := Config{
     "bootstrap.servers": "localhost:9092",
   },
   SchemaSerializerConfig: SchemaSerializerConfig{
-    SchemaRegistryURL: "mock://test"
+    SchemaRegistryURL: "mock://test.com"
   },
   DataSource: "host=localhost port=5432 user=postgres password= dbname=postgres sslmode=disable",
 }
